@@ -1,25 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+import Loadable from 'react-loadable';
+
+const Home = Loadable({
+  loader: () => import('./page/home/Home'),
+  loading: () => <div>加载中...</div>
+})
+
+const Login = Loadable({
+  loader: () => import('./page/login/Login'),
+  loading: () => <div>加载中...</div>
+})
+
+const Register = Loadable({
+  loader: () => import('./page/register/Register'),
+  loading: () => <div>加载中...</div>
+})
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HashRouter>
+      <Switch>
+        <Route path='/' exact component={Home}></Route>
+        <Route path='/login' component={Login}></Route>
+        <Route path='/register' component={Register}></Route>
+        <Redirect to='/'></Redirect>
+      </Switch>
+    </HashRouter>
   );
 }
 
