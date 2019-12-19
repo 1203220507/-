@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Toast, List, InputItem, WhiteSpace, Button } from 'antd-mobile';
+import { userLogin } from '../../apis/apis'
 
 export default class Login extends Component {
     constructor() {
@@ -23,8 +24,17 @@ export default class Login extends Component {
 
     submit = () => {
         var telReg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
-        if (telReg.test(this.state.tel) && this.state.pwd) {
-            Toast.success('登录成功！', 1);
+        const { tel, pwd } = this.state;
+        if (telReg.test(tel) && pwd) {
+            userLogin({
+                phoneNum: tel,
+                password: pwd
+            }).then(res => {
+                Toast.success('登录成功！', 1);
+                sessionStorage.setItem('token', res.token);
+                sessionStorage.setItem('phoneNum', res.data.phoneNum);
+                this.props.history.replace('/')
+            })
         } else {
             Toast.fail('请正确填写手机号或密码', 1);
         }
